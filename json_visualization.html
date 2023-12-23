@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Visualization</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    textarea {
+      width: 50%;
+      height: 100px;
+
+
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    input,
+    button {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>JSON Visualization</h2>
+
+  <!-- <table id="jsonTable">
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+    </tr>
+  </table>
+
+  <form id="inputForm">
+    <label for="newKey">New Key:</label> -->
+
+  <div id="tableContainer"></div>
+
+  <form id="inputForm">
+    <textarea name="Value" id="value" placeholder="Paste your JSON here">{"foo":"bar"}</textarea>
+    <button type="submit" id="visualize-btn">Visualize JSON</button>
+
+  </form>
+
+  <h3>Add/Edit Key-Value</h3>
+  <label for="newKey">New Key:</label>
+  <input type="text" id="newKey" placeholder="Enter Key">
+
+  <label for="newValue">New Value:</label>
+  <input type="text" id="newValue" placeholder="Enterkey">
+
+  <button onclick="addEditKeyValue()">Add/Edit Key-Value</button>
+
+  <script>
+    // const jsonData = Object.getElementById('value')
+    // const dataObject = JSON.parse(jsonData);
+
+    // Function to update the table with JSON data
+    // function updateTable() {
+
+
+    //   // Clear existing rows
+    //   while (table.rows.length > 1) {
+    //     table.deleteRow(1);
+    //   }
+
+    // Add new rows based on JSON data
+    // for (const [key, value] of Object.entries(dataObject)) {
+    //   const row = table.insertRow();
+    //   const cell1 = row.insertCell(0);
+    //   const cell2 = row.insertCell(1);
+    //   cell1.innerHTML = key;
+    //   cell2.innerHTML = value;
+    // }
+    // }
+
+    document.querySelector("#visualize-btn")
+      .addEventListener("click", (e) => {
+        e.preventDefault();
+        addData();
+      })
+
+    let jsonData = {}
+
+    function addEditKeyValue() {
+      const newKey = document.getElementById('newKey').value;
+      const newValue = document.getElementById('newValue').value;
+
+      if (newKey && newValue) {
+        // Add or edit the key-value pair
+        jsonData[newKey] = newValue;
+
+        // Update the table
+        updateTable();
+
+        // Clear input fields
+        document.getElementById('newKey').value = '';
+        document.getElementById('newValue').value = '';
+      }
+    }
+
+    // Function to add new data to JSON and update the table
+    function addData() {
+      // const newKey = document.getElementById('newKey').value;
+      // const newValue = document.getElementById('newValue').value;
+      const Value = document.getElementById('value').value
+      console.log(Value);
+      try {
+        const dataObject = JSON.parse(Value);
+
+        const table = document.createElement('table');
+        table.border = '1';
+
+        const headerRow = table.insertRow()
+        const keys = Object.keys(dataObject);
+        keys.forEach(key => {
+          const th = document.createElement('th');
+          th.textContent = key;
+          headerRow.appendChild(th);
+        });
+
+        const dataRow = table.insertRow();
+        keys.forEach(key => {
+          const td = document.createElement('td');
+          td.textContent = dataObject[key];
+          dataRow.appendChild(td)
+        });
+
+        const tableContainer = document.getElementById('tableContainer');
+        tableContainer.innerHTML = '';
+        tableContainer.appendChild(table);
+
+      } catch (error) {
+        console.log(error.message);
+        alert('Invalid JSON format. Please check and try again.');
+      }
+
+      //   if (Value) {
+      //     dataObject[newKey] = newValue;
+      //     updateTable();
+      //     // document.getElementById('newKey').value = '';
+      //     document.getElementById('Value').value = '';
+      //   }
+    }
+
+
+    // // Initial update of the table
+    // updateTable();
+  </script>
+
+</body>
+
+</html>
